@@ -15,7 +15,7 @@ exports.findUsers = async (req, res) => {
 exports.createUser = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
-    //verificar por nombre y email//
+    //verificar por nombre y email si encontramos algo entonces no permitimos crear usurio 🤣//
     const findUser = await UsersModel.findOne({
       where: {
         name,

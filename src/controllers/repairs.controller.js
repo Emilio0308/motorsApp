@@ -92,6 +92,7 @@ exports.deleteRepair = async (req, res) => {
       id,
     },
   });
+  // para aegurarnos q la tarea no esta completa no se si usar dataValues sea correcto pero fue lo q se me ocurrio xD 🤡//
   if (repair.dataValues.status === 'complete') {
     return res.status(500).json({
       message: `the repair with id ${id} is completed cannot be canceled`,
