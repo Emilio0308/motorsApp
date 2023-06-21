@@ -6,7 +6,7 @@ const initModel = require('./models/initModel');
 db.authenticate()
   .then(() => console.log('Database authenticate'))
   .catch((err) => console.log(err));
-
+//funcion q relaciona las tablas
 initModel();
 
 db.sync()

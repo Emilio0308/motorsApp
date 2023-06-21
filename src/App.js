@@ -8,7 +8,7 @@ const repairsRoutes = require('./routes/repairs.routes');
 const { handleError } = require('./controllers/error.controlloer');
 //guardamos express en la variable app/
 const app = express();
-//indicamos a app q usaremos archivos JSON//
+//indicamos a app que usaremos archivos JSON//
 app.use(express.json());
 //LE INDICAMOS A APP USAR CORS EN SU CONFIGURACION POR DEFECTO//
 app.use(cors());

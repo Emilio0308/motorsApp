@@ -58,6 +58,7 @@ exports.protecAccountOwner = catchAsync(async (req, res, next) => {
 exports.restrictedRoute = (roles) => {
   return (req, res, next) => {
     const { sesionUser } = req;
+
     if (!roles.includes(sesionUser.role)) {
       return next(new AppError('Unauthorized to perform this action'));
     }

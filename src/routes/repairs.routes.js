@@ -14,7 +14,7 @@ const authMiddleware = require('../middleware/auth.middleware');
 
 const router = express.Router();
 
-//protec como middleware que proteja todas las rutas ya que debes logear para crear o modificar repairs//
+//protec como middleware que proteja todas las rutas ya que se debe logear para crear o modificar repairs//
 router.use(authMiddleware.protect);
 
 //validar campos antes de crear una repair//

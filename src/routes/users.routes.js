@@ -1,5 +1,6 @@
 //paracrear rutas requerimos express//
 const express = require('express');
+//controllers
 const {
   findUsers,
   createUser,
@@ -8,6 +9,7 @@ const {
   deleteUser,
   login,
 } = require('../controllers/users.controller');
+//middleware
 const validationsMiddleware = require('./../middleware/validation.middleware');
 const authMiddleware = require('../middleware/auth.middleware');
 const validById = require('../middleware/validById.middleware');

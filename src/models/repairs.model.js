@@ -26,11 +26,11 @@ const Repairs = db.define('repairs', {
     type: DataTypes.ENUM('pending', 'complete', 'cancelled'),
     defaultValue: 'pending',
   },
+  //hice mal el modelo de repairs deberia ser userId con camelCase por eso indique la llave foranea en el init model//
   userid: {
     allowNull: false,
     type: DataTypes.INTEGER,
   },
 });
-
 
 module.exports = Repairs;
