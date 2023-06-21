@@ -32,4 +32,5 @@ const UsersModel = db.define('users', {
   },
 });
 
+
 module.exports = UsersModel;

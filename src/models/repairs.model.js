@@ -13,6 +13,14 @@ const Repairs = db.define('repairs', {
     allowNull: false,
     type: DataTypes.DATE,
   },
+  motorsNumber: {
+    allowNull: false,
+    type: DataTypes.STRING,
+  },
+  description: {
+    allowNull: false,
+    type: DataTypes.TEXT,
+  },
   status: {
     allowNull: false,
     type: DataTypes.ENUM('pending', 'complete', 'cancelled'),
@@ -23,5 +31,6 @@ const Repairs = db.define('repairs', {
     type: DataTypes.INTEGER,
   },
 });
+
 
 module.exports = Repairs;

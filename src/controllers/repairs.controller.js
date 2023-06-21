@@ -1,113 +1,78 @@
-const Repairs = require('./../models/repairs.model');
+const catchAsync = require('../utils/catchAsync');
+const RepairsModel = require('./../models/repairs.model');
+const UsersModel = require('../models/users.model');
 
-exports.findAllRepairs = async (req, res) => {
-  const repairs = await Repairs.findAll({
+exports.findAllRepairs = catchAsync(async (req, res, next) => {
+  const repairs = await RepairsModel.findAll({
     where: {
       status: 'pending',
+    },
+    attributes: { exclude: ['createdAt', 'updatedAt'] },
+    include: {
+      model: UsersModel,
+      attributes: ['name', 'email', 'role'],
     },
   });
   return res.status(200).json({
     message: 'all repairs found',
     status: 'succes',
+    results: repairs.length,
     repairs,
   });
-};
+});
 
-exports.createRepair = async (req, res) => {
-  try {
-    const { date, userid } = req.body;
-    const repair = await Repairs.create({ date, userid });
-    return res.status(200).json({
-      message: `repair for the user with id: ${userid} has been created`,
-      status: 'succes',
-      repair,
-    });
-  } catch (err) {
-    console.log(err);
-    return res.status(500).json({
-      message: 'internal server error',
-      status: 'fail',
-    });
-  }
-};
-exports.findOneRepair = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const repair = await Repairs.findOne({
-      where: {
-        id,
-        status: 'pending',
-      },
-    });
-    return res.status(200).json({
-      message: `repair con id: ${id} found`,
-      statstus: 'succes',
-      repair,
-    });
-  } catch (err) {
-    console.log(err);
-    return res.status(500).json({
-      message: 'internal server error',
-      status: 'fail',
-    });
-  }
-};
+exports.createRepair = catchAsync(async (req, res, next) => {
+  const { sesionUser } = req;
+  const { date, motorsNumber, description } = req.body;
 
-exports.updateRepair = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const repair = await Repairs.findOne({
-      where: {
-        id,
-        status: 'pending',
-      },
-    });
-    if (!repair) {
-      return res.status(404).json({
-        message: `repair with id ${id} not found`,
-        status: ' error',
-      });
-    }
-    await repair.update({
-      status: 'complete',
-    });
-    return res.status(200).json({
-      message: `repair with id: ${id} updated`,
-      status: 'succes',
-      repair,
-    });
-  } catch (err) {
-    console.log(err);
-    return res.status(500).json({
-      message: 'internal server error',
-      status: 'fail',
-    });
-  }
-};
+  const repair = await RepairsModel.create({
+    date,
+    motorsNumber,
+    description,
+    userid: sesionUser.id,
+  });
 
-exports.deleteRepair = async (req, res) => {
-  const { id } = req.params;
-  const repair = await Repairs.findOne({
-    where: {
-      id,
+  return res.status(200).json({
+    message: `repair for the user with has been created`,
+    status: 'succes',
+    repair: {
+      status: repair.status,
+      id: repair.id,
+      date: repair.date,
+      motorsNumber: repair.motorsNumber,
+      description: repair.description,
+      userid: repair.userid,
     },
   });
-  // para aegurarnos q la tarea no esta completa no se si usar dataValues sea correcto pero fue lo q se me ocurrio xD 🤡//
-  if (repair.dataValues.status === 'complete') {
-    return res.status(500).json({
-      message: `the repair with id ${id} is completed cannot be canceled`,
-      status: 'error',
-    });
-  }
-  if (!repair) {
-    return res.status(404).json({
-      message: `repair with id: ${id} not found`,
-      status: 'error',
-    });
-  }
-  repair.update({ status: 'cancelled' });
+});
+
+exports.findOneRepair = catchAsync(async (req, res, next) => {
+  const { repair } = req;
+
   return res.status(200).json({
-    message: `repair with id: ${id} deleted`,
+    message: `repair con id: ${repair.id} found`,
+    statstus: 'succes',
+    repair,
+  });
+});
+
+exports.updateRepair = catchAsync(async (req, res, next) => {
+  const { repair } = req;
+  await repair.update({
+    status: 'complete',
+  });
+  return res.status(200).json({
+    message: `repair with id: ${repair.id} updated to completed`,
     status: 'succes',
   });
-};
+});
+
+exports.deleteRepair = catchAsync(async (req, res, next) => {
+  const { repair } = req;
+
+  repair.update({ status: 'cancelled' });
+  return res.status(200).json({
+    message: `repair with id: ${repair.id} has been deleted`,
+    status: 'succes',
+  });
+});
