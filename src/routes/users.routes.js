@@ -27,6 +27,7 @@ router
   .get(validById.userId, findOneUser)
   //agregamos protect valid user y protec accountOwner para que solo el dueño de la cuenta pueda cambiar o elimar su cuenta//
   .patch(
+    validationsMiddleware.validUpdate,
     authMiddleware.protect,
     validById.userId,
     authMiddleware.protecAccountOwner,

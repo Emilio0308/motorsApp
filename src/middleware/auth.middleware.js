@@ -6,15 +6,16 @@ const jwt = require('jsonwebtoken');
 //se que esta parte se uso el promisify pero quise intentar con una promesa, me indica si es correcto profe//
 const decodeToken = (token) => {
   return new Promise((resolve, reject) => {
-    jwt.verify(token, process.env.JWT_SECRET_SEED, (err, token) => {
+    jwt.verify(token, process.env.JWT_SECRET_SEED, (err, decodeToken) => {
       if (err) {
         reject(err);
       }
-      resolve(token);
+      resolve(decodeToken);
     });
   });
 };
 exports.protect = catchAsync(async (req, res, next) => {
+  
   let token;
   //determinar si se envia el token en la req//
   if (
@@ -43,6 +44,7 @@ exports.protect = catchAsync(async (req, res, next) => {
     );
   }
   req.sesionUser = user;
+  
   next();
 });
 

@@ -59,3 +59,14 @@ exports.validLogin = [
     .withMessage('The password must be at least 6 characters'),
   validateFields,
 ];
+
+exports.validUpdate = [
+  body('email')
+    .notEmpty()
+    .withMessage('email cannot be empty')
+    .normalizeEmail()
+    .isEmail()
+    .withMessage('The provided email is invalid'),
+  body('name').notEmpty().withMessage('name cannot be empty'),
+  validateFields,
+];
