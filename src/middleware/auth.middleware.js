@@ -8,7 +8,7 @@ const decodeToken = (token) => {
   return new Promise((resolve, reject) => {
     jwt.verify(token, process.env.JWT_SECRET_SEED, (err, decodeToken) => {
       if (err) {
-        reject(err);
+        reject(new AppError(`${err.message}`, 400));
       }
       resolve(decodeToken);
     });
